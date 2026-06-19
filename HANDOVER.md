@@ -83,7 +83,14 @@ Boot → Title → CharacterSelect → Classroom → Library
 }
 ```
 
-## 7. Status Saat Ini (Update Terakhir — v0.2)
+## 7. Status Saat Ini (Update Terakhir — v0.2.1)
+**HOTFIX: bug movement vertikal & dialog stuck.**
+
+- [x] Cache key objects di `create()` sekali (tidak boleh `addKey()` di `update()`/`handleDialogInput()`/`handleInteractInput()`).
+- [x] Hapus animasi langkah via tween yang override `player.y` (mengganggu collision detection).
+- [x] Regression test: 3 test untuk pola input key.
+
+**Game LIVE di**: https://yogaibnu.github.io/pengenalan-perpus/ (auto-deploy via GitHub Actions)
 **Game LIVE di**: https://yogaibnu.github.io/pengenalan-perpus/ (auto-deploy via GitHub Actions)
 
 - [x] Konfigurasi project (Vite + TS + Vitest).

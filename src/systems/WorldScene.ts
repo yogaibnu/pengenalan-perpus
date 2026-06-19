@@ -14,6 +14,19 @@ export abstract class WorldScene extends Phaser.Scene {
   protected player!: Phaser.GameObjects.Sprite;
   protected playerFrontKey!: string;
   protected playerBackKey!: string;
+  protected keys!: {
+    space: Phaser.Input.Keyboard.Key;
+    enter: Phaser.Input.Keyboard.Key;
+    up: Phaser.Input.Keyboard.Key;
+    down: Phaser.Input.Keyboard.Key;
+    w: Phaser.Input.Keyboard.Key;
+    s: Phaser.Input.Keyboard.Key;
+    shift: Phaser.Input.Keyboard.Key;
+    left: Phaser.Input.Keyboard.Key;
+    right: Phaser.Input.Keyboard.Key;
+    a: Phaser.Input.Keyboard.Key;
+    d: Phaser.Input.Keyboard.Key;
+  };
   protected cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   protected wasd!: { up: Phaser.Input.Keyboard.Key; down: Phaser.Input.Keyboard.Key; left: Phaser.Input.Keyboard.Key; right: Phaser.Input.Keyboard.Key; interact: Phaser.Input.Keyboard.Key };
   protected dialog!: DialogBox;
@@ -76,14 +89,28 @@ export abstract class WorldScene extends Phaser.Scene {
     this.cameras.main.setBounds(0, 0, this.mapData.cols * ts, this.mapData.rows * ts);
     this.cameras.main.startFollow(this.player, true, 0.15, 0.15);
 
-    // input
+    // input - cache key objects di create() sekali, JANGAN addKey() di update().
+    // addKey() setiap frame bisa membuat state key drift dan JustDown tidak reliable.
     this.cursors = this.input.keyboard!.createCursorKeys();
+    this.keys = {
+      space: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
+      enter: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER),
+      up: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.UP),
+      down: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
+      left: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
+      right: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
+      w: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.W),
+      s: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.S),
+      a: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+      d: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.D),
+      shift: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT),
+    };
     this.wasd = {
-      up: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.W),
-      down: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.S),
-      left: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.A),
-      right: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.D),
-      interact: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
+      up: this.keys.w,
+      down: this.keys.s,
+      left: this.keys.a,
+      right: this.keys.d,
+      interact: this.keys.space,
     };
 
     this.dialog = new DialogBox(this);
@@ -171,6 +198,11 @@ export abstract class WorldScene extends Phaser.Scene {
   }
 
   override update(_time: number, delta: number) {
+    if ((this as unknown as { _uc?: number })._uc === undefined) (this as unknown as { _uc?: number })._uc = 0;
+    (this as unknown as { _uc: number })._uc++;
+    const u = (this as unknown as { _uc: number })._uc;
+    if (u < 5 || u % 60 === 0) {
+      }
     if (this.dialog.isActive() || this.materialPanel) {
       this.handleDialogInput();
       return;
@@ -195,7 +227,6 @@ export abstract class WorldScene extends Phaser.Scene {
     const dt = delta / 1000;
     const moveLen = Math.hypot(dx, dy);
     if (moveLen === 0) {
-      this.tweens.killTweensOf(this.player);
       return;
     }
     dx /= moveLen;
@@ -205,16 +236,6 @@ export abstract class WorldScene extends Phaser.Scene {
     // gerak + collision
     this.tryMove(vx * dt, 0);
     this.tryMove(0, vy * dt);
-    // animasi bob vertikal saat bergerak
-    if (!this.tweens.isTweening(this.player)) {
-      this.tweens.add({
-        targets: this.player,
-        y: this.player.y - 2,
-        duration: 110,
-        yoyo: true,
-        repeat: -1,
-      });
-    }
 
     // frame & flip
     const wantBack = dy < 0 && dx === 0;
@@ -250,25 +271,26 @@ export abstract class WorldScene extends Phaser.Scene {
   }
 
   private handleDialogInput() {
-    // Shift+Enter → skip semua dialog
-    const shift = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
-    if ((Phaser.Input.Keyboard.JustDown(this.cursors.space!) || Phaser.Input.Keyboard.JustDown(this.wasd.interact))
-        && shift.isDown) {
-      this.dialog.skipAll();
-      return;
-    }
-    if (Phaser.Input.Keyboard.JustDown(this.cursors.space!) || Phaser.Input.Keyboard.JustDown(this.wasd.interact)) {
-      this.dialog.advance();
-    } else if (Phaser.Input.Keyboard.JustDown(this.cursors.up!) || Phaser.Input.Keyboard.JustDown(this.wasd.up)) {
+    if (Phaser.Input.Keyboard.JustDown(this.keys.space) || Phaser.Input.Keyboard.JustDown(this.keys.enter)) {
+      if (this.keys.shift.isDown) {
+        this.dialog.skipAll();
+        return;
+      }
+      if (this.dialog.hasChoices()) {
+        this.dialog.confirmChoice();
+      } else {
+        this.dialog.advance();
+      }
+    } else if (Phaser.Input.Keyboard.JustDown(this.keys.up) || Phaser.Input.Keyboard.JustDown(this.keys.w)) {
       this.dialog.moveChoice(-1);
-    } else if (Phaser.Input.Keyboard.JustDown(this.cursors.down!) || Phaser.Input.Keyboard.JustDown(this.wasd.down)) {
+    } else if (Phaser.Input.Keyboard.JustDown(this.keys.down) || Phaser.Input.Keyboard.JustDown(this.keys.s)) {
       this.dialog.moveChoice(1);
     }
   }
 
   private handleInteractInput() {
     if (this.interactCooldown > 0) return;
-    if (Phaser.Input.Keyboard.JustDown(this.cursors.space!) || Phaser.Input.Keyboard.JustDown(this.wasd.interact)) {
+    if (Phaser.Input.Keyboard.JustDown(this.keys.space) || Phaser.Input.Keyboard.JustDown(this.keys.enter)) {
       const ev = this.findNearbyEvent();
       if (ev) {
         this.triggerEvent(ev);
