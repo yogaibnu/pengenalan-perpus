@@ -106,10 +106,21 @@ Boot → Title → CharacterSelect → Classroom → Library
 - [x] Audio BGM + SFX (WebAudio API sintesis, tanpa file eksternal).
 - [x] Tutorial popup interaktif di ClassroomScene (auto-dismiss saat pemain bergerak).
 - [x] Unit test tambahan untuk Audio (3 test).
-- [x] Smoke test untuk DigitalLibrary, Quiz, Ending (semua scene di-render, 0 error console).
+- [x] Smoke test untuk semua scene (0 error console).
+- [x] Touch D-pad untuk mobile/tablet (auto-detect device.input.touch).
+- [x] Transisi fade in/out antar scene (300-400ms).
+- [x] Animasi langkah pemain (bouncing vertikal saat berjalan).
+- [x] Tombol mute/unmute (🔊/🔇) di TitleScene.
 - [ ] Unit test untuk DialogBox flow (kompleks; perlu Phaser mock).
-- [ ] Polish lebih lanjut: animasi langkah pemain, transisi scene, kontrol touch untuk mobile.
-- [ ] Audio: tombol mute/unmute di TitleScene.
+- [ ] Polish: lebih banyak aset NPC, dekorasi map, audio tambahan.
+
+## 7c. Commit Riwayat (ringkas)
+- `b6dcf39` feat: initial scaffold
+- `74cd833` chore: gitignore tsbuildinfo
+- `fe09e7f` docs: update handover
+- `3accc22` feat: sprite 2-arah + tile school kontras
+- `7dcd0df` feat: audio, pause menu, progress HUD, tutorial, highlight
+- `94ef9ef` feat: touch D-pad, transisi fade, animasi langkah, mute toggle
 
 ## Catatan Smoke Test
 - File smoke: `scripts-smoke.mjs` (Playwright, spawn `vite preview` lalu navigasi + screenshot).

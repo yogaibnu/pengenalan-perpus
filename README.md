@@ -1,45 +1,66 @@
 # Pengenalan Perpustakaan
 
-Game web edukatif 2D bergaya RPG klasik untuk memperkenalkan **perpustakaan sekolah** dan **perpustakaan digital** kepada pelajar dan umum. Dibangun dengan Phaser 3 + Vite + TypeScript, tanpa gambar eksternal (semua sprite & tile di-generate secara prosedural).
+Game web edukatif 2D bergaya RPG klasik untuk memperkenalkan **perpustakaan sekolah** dan **perpustakaan digital** kepada pelajar dan umum.
 
-## Fitur
-- 5 adegan: Judul → Pilih Karakter → Ruang Kelas → Perpustakaan Sekolah → Perpustakaan Digital → Kuis → Ending.
-- 5 buku referensi interaktif (Kamus, Ensiklopedia, Biografi, Geografi, Buku Pedoman).
-- 4 konsep perpustakaan digital (E-Book, OPAC, Database, Repositori).
-- Kuis 5 soal dengan sistem lencana otomatis.
-- Save otomatis ke `localStorage` (gender, materi yang sudah dibaca, lencana).
-- Responsif (Phaser Scale.FIT) — jalan di laptop/HP.
-- Aset 100% prosedural — tidak ada dependensi gambar eksternal.
+> Inspirasi alur & fitur: `referencecollector.web.id` (RPG Maker MV), dibangun ulang dari nol dengan stack web modern.
 
-## Cara Menjalankan (Lokal di Mac)
+## ✨ Fitur
+- **8 scene**: Boot → Title → CharacterSelect → Classroom → Library → DigitalLibrary → Quiz → Ending.
+- **5 buku referensi** interaktif di perpustakaan sekolah: Kamus, Ensiklopedia, Biografi, Geografi, Buku Pedoman.
+- **4 konsep perpustakaan digital**: E-Book, OPAC, Database, Repositori.
+- **Kuis 5 soal** dengan sistem lencana otomatis (Pustakawan Muda, Penjelajah Buku, Pemula).
+- **Save otomatis** ke `localStorage` (gender, materi yang sudah dibaca, lencana, scene dikunjungi).
+- **Audio**: BGM 3 channel (title, explore, quiz) + SFX (interact, success, fail) — sintesis via WebAudio API, tanpa file audio.
+- **Touch D-pad** untuk mobile/tablet (auto-detect).
+- **Transisi fade** antar scene.
+- **Progress HUD** (X / total materi dibaca).
+- **Highlight event** terdekat (pulse ring kuning) untuk UX discoverability.
+- **Pause menu** (Esc) — lanjutkan atau kembali ke judul.
+- **Tutorial popup** interaktif di scene pertama.
+
+## 🛠 Stack
+- **Engine**: Phaser 3.90
+- **Build**: Vite 5
+- **Bahasa**: TypeScript 5 (strict)
+- **Test**: Vitest + jsdom
+- **Aset**: 100% prosedural (sprite + tileset via Canvas2D) — tidak ada gambar/file audio eksternal.
+
+## 🚀 Menjalankan Lokal (Mac)
 ```bash
 cd pengenalan-perpus
 npm install
-npm run dev
-# buka http://localhost:5173
+npm run dev          # http://localhost:5173
 ```
 
-## Build Produksi
+## 📦 Build Produksi
 ```bash
-npm run build
-npm run preview
-# output di folder dist/
+npm run build        # output di dist/
+npm run preview      # pratinjau build
 ```
 
-## Skrip
-- `npm run dev` — server pengembangan Vite.
-- `npm run build` — type-check TypeScript + bundle Vite.
-- `npm run preview` — pratinjau hasil build.
-- `npm run typecheck` — TypeScript saja.
-- `npm run test` — Vitest unit test.
+## 🧪 Test
+```bash
+npm run typecheck    # TypeScript type-check
+npm run test         # Vitest unit test
+```
 
-## Kontrol
-- Panah / WASD: bergerak.
-- Spasi / Enter: interaksi (bicara dengan NPC, buka buku, pilih jawaban).
-- ↑↓: memilih jawaban kuis / opsi dialog.
+## 🎮 Kontrol
+| Aksi | Tombol |
+|---|---|
+| Bergerak | Panah / WASD |
+| Interaksi | Spasi / Enter (saat dekat NPC/buku) |
+| Pilih jawaban kuis | ↑↓ lalu Spasi/Enter |
+| Pause | Esc |
+| Mute/unmute | 🔊 di layar judul |
 
-## Struktur Project
-Lihat `HANDOVER.md` untuk dokumentasi teknis lengkap dan catatan untuk melanjutkan di chat baru.
+Di mobile, gunakan D-pad on-screen + tombol **Aksi**.
 
-## Lisensi
-Konten edukasi dalam game ini bebas digunakan untuk tujuan pengajaran. Kode dilisensikan MIT (lihat `LICENSE`).
+## 📁 Struktur
+Lihat `HANDOVER.md` untuk dokumentasi teknis lengkap dan catatan handover antar chat.
+
+## 📜 Lisensi
+- **Kode**: MIT (lihat `LICENSE`).
+- **Konten edukasi**: Bebas digunakan untuk pengajaran.
+
+## 🔗 Repo
+https://github.com/yogaibnu/pengenalan-perpus
