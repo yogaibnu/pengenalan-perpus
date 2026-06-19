@@ -83,7 +83,24 @@ Boot → Title → CharacterSelect → Classroom → Library
 }
 ```
 
-## 7. Status Saat Ini (Update Terakhir)
+## 7. Status Saat Ini (Update Terakhir — v0.2)
+**Game LIVE di**: https://yogaibnu.github.io/pengenalan-perpus/ (auto-deploy via GitHub Actions)
+
+- [x] Konfigurasi project (Vite + TS + Vitest).
+- [x] Sistem save (`save.ts`).
+- [x] `DialogBox` UI + skip (Shift+Enter).
+- [x] `SpriteFactory` prosedural (front/back sprite + 3 tema tileset).
+- [x] `WorldScene` base: collision, event, exit, material panel, pause menu, transisi fade, highlight event, touch D-pad, animasi langkah.
+- [x] Konten data orisinal: 5 buku referensi + 4 konsep perpustakaan digital + 5 soal kuis + 5 item mini-game.
+- [x] Scene konkret: Boot, Title (mute), CharacterSelect, Classroom (tutorial popup), Library (5 buku + 4 NPC), DigitalLibrary (4 konsep + 4 NPC), Quiz, MatchGame (mini-game), Ending.
+- [x] Audio BGM 3 channel + SFX (WebAudio API sintesis).
+- [x] Progress HUD.
+- [x] Unit test: 6/6 (save + audio).
+- [x] Build & smoke test lokal: 0 error console.
+- [x] Live deployment ke GitHub Pages (auto-deploy).
+- [x] NPC tambahan: Siswa Teladan, Pustakawan Sirkulasi, Pembaca Aktif, Admin Sistem, Peneliti.
+
+## 7a. Status v0.1 (sebelumnya)
 - [x] Konfigurasi project (Vite + TS + Vitest).
 - [x] Sistem save (`save.ts`).
 - [x] `DialogBox` UI.
