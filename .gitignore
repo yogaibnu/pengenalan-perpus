@@ -1,0 +1,12 @@
+node_modules
+dist
+dist-ssr
+.DS_Store
+*.log
+.vite
+coverage
+.env
+.env.local
+.idea
+.vscode
+scripts-smoke.mjs

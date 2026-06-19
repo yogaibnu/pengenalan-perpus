@@ -1,0 +1,29 @@
+{
+  "name": "pengenalan-perpus",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Game edukatif 2D 'Pengenalan Perpustakaan' (sekolah & digital) untuk pelajar dan umum. Dibangun dengan Phaser 3 + Vite + TypeScript.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --host",
+    "typecheck": "tsc -b --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "phaser": "^3.90.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.5",
+    "jsdom": "^25.0.1",
+    "playwright": "^1.61.0",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10",
+    "vitest": "^2.1.4"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
