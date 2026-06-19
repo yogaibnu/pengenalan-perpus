@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { QUIZ } from "../data/quiz";
 import { loadState, saveState } from "../systems/save";
+import { audio } from "../systems/Audio";
 
 export class QuizScene extends Phaser.Scene {
   private qIndex = 0;
@@ -30,6 +31,7 @@ export class QuizScene extends Phaser.Scene {
       color: "#fde68a",
     }).setOrigin(0.5);
 
+    audio.startBgm("quiz");
     this.input.keyboard!.on("keydown-UP", () => this.move(-1));
     this.input.keyboard!.on("keydown-DOWN", () => this.move(1));
     this.input.keyboard!.on("keydown-W", () => this.move(-1));
@@ -95,10 +97,11 @@ export class QuizScene extends Phaser.Scene {
   }
 
   private answer() {
+    audio.playSfx("interact");
     const q = QUIZ[this.qIndex];
     if (!q) return this.finish();
     const correct = this.selected === q.correctIndex;
-    if (correct) this.score++;
+    if (correct) { this.score++; audio.playSfx("success"); } else audio.playSfx("fail");
 
     // tampilkan penjelasan singkat
     this.optionTexts.forEach((t) => t.destroy());

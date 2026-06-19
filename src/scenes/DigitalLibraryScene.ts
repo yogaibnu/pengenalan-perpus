@@ -2,6 +2,8 @@ import { WorldScene } from "../systems/WorldScene";
 import type { TileMapData } from "../types";
 import { DIALOGS } from "../data/dialogs";
 import { MATERIALS } from "../data/materials";
+import { ProgressHud } from "../systems/ProgressHud";
+import { audio } from "../systems/Audio";
 
 export class DigitalLibraryScene extends WorldScene {
   constructor() {
@@ -13,6 +15,8 @@ export class DigitalLibraryScene extends WorldScene {
   }
 
   protected onAfterCreate(): void {
+    audio.startBgm("explore");
+    new ProgressHud(this, 4);
     this.add.text(16, 16, "Perpustakaan Digital — pelajari 4 konsep di sini.", {
       fontFamily: "monospace",
       fontSize: "12px",

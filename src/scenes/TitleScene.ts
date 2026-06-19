@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { audio } from "../systems/Audio";
 
 export class TitleScene extends Phaser.Scene {
   constructor() {
@@ -38,6 +39,7 @@ export class TitleScene extends Phaser.Scene {
       color: "#cbd5e1",
     }).setOrigin(0.5);
 
+    audio.startBgm("title");
     const startBtn = this.add.text(w / 2, 320, "[ Mulai ]", {
       fontFamily: "monospace",
       fontSize: "22px",

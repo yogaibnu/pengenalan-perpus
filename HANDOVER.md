@@ -98,14 +98,18 @@ Boot → Title → CharacterSelect → Classroom → Library
   - Visibilitas: public. Branch: main.
 
 ## 7b. Roadmap Lanjutan
-- [ ] Tambah frame 'up' untuk sprite agar hadap atas tidak terlihat seperti hadap depan.
-- [ ] Tile tema school: warnai dinding lebih kontras dengan library (saat ini mirip).
-- [ ] Smoke test untuk DigitalLibrary, Quiz, Ending.
-- [ ] Audio (BGM/SFX) via WebAudio API (sintesis sederhana, tanpa file eksternal).
-- [ ] Highlight event terdekat + tooltip (UX discoverability).
-- [ ] Pause menu (Esc → keluar ke title / reset).
-- [ ] Progress bar (jumlah materi dibaca / total).
-- [ ] Unit test tambahan (DialogBox flow, world interaction).
+- [x] Tambah frame 'up' untuk sprite agar hadap atas tidak terlihat seperti hadap depan.
+- [x] Tile tema school: warnai dinding lebih kontras dengan library.
+- [x] Highlight event terdekat (pulse ring kuning) saat pemain berdiri di dekat event.
+- [x] Pause menu (Esc → Lanjutkan / Kembali ke Judul).
+- [x] Progress bar (HUD pojok kanan-atas: jumlah materi dibaca / total).
+- [x] Audio BGM + SFX (WebAudio API sintesis, tanpa file eksternal).
+- [x] Tutorial popup interaktif di ClassroomScene (auto-dismiss saat pemain bergerak).
+- [x] Unit test tambahan untuk Audio (3 test).
+- [x] Smoke test untuk DigitalLibrary, Quiz, Ending (semua scene di-render, 0 error console).
+- [ ] Unit test untuk DialogBox flow (kompleks; perlu Phaser mock).
+- [ ] Polish lebih lanjut: animasi langkah pemain, transisi scene, kontrol touch untuk mobile.
+- [ ] Audio: tombol mute/unmute di TitleScene.
 
 ## Catatan Smoke Test
 - File smoke: `scripts-smoke.mjs` (Playwright, spawn `vite preview` lalu navigasi + screenshot).

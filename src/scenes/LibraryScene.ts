@@ -2,6 +2,8 @@ import { WorldScene } from "../systems/WorldScene";
 import type { TileMapData } from "../types";
 import { DIALOGS } from "../data/dialogs";
 import { MATERIALS } from "../data/materials";
+import { ProgressHud } from "../systems/ProgressHud";
+import { audio } from "../systems/Audio";
 
 export class LibraryScene extends WorldScene {
   constructor() {
@@ -13,6 +15,8 @@ export class LibraryScene extends WorldScene {
   }
 
   protected onAfterCreate(): void {
+    audio.startBgm("explore");
+    new ProgressHud(this, 5);
     this.add.text(16, 16, "Perpustakaan Sekolah — dekati 5 buku referensi.", {
       fontFamily: "monospace",
       fontSize: "12px",

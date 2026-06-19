@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { loadState, resetState } from "../systems/save";
+import { audio } from "../systems/Audio";
 
 export class EndingScene extends Phaser.Scene {
   constructor() {
@@ -12,6 +13,7 @@ export class EndingScene extends Phaser.Scene {
   }
 
   create(data: { score?: number; total?: number; badge?: string }) {
+    audio.stopBgm();
     const w = this.cameras.main.width;
     const h = this.cameras.main.height;
     this.add.rectangle(0, 0, w, h, 0x0f172a).setOrigin(0);

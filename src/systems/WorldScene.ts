@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import type { TileMapData, MapEvent, DialogData, MaterialData } from "../types";
 import { TILE_SIZE, generateTileset, generateCharacterSprite } from "./SpriteFactory";
 import { DialogBox } from "./DialogBox";
+import { audio } from "./Audio";
 import { loadState, saveState } from "./save";
 
 /**
@@ -87,6 +88,9 @@ export abstract class WorldScene extends Phaser.Scene {
 
     this.dialog = new DialogBox(this);
 
+    // ESC → pause menu
+    this.input.keyboard!.on("keydown-ESC", () => this.togglePauseMenu());
+
     // tandai scene dikunjungi
     const state = loadState();
     if (!state.visited.includes(this.scene.key)) {
@@ -120,6 +124,12 @@ export abstract class WorldScene extends Phaser.Scene {
       glyph = this.add.circle(0, 0, ts / 3, 0xa7f3d0, 0.8);
     }
     container.add(glyph);
+    // ring highlight (awalnya tersembunyi)
+    const ring = this.add.circle(0, 0, ts / 2, 0xfde68a, 0);
+    ring.setStrokeStyle(2, 0xfbbf24, 0.8);
+    ring.setVisible(false);
+    container.add(ring);
+    container.setData("ring", ring);
     if (ev.label) {
       const t = this.add.text(0, -ts / 2 - 4, ev.label, {
         fontFamily: "monospace",
@@ -133,6 +143,29 @@ export abstract class WorldScene extends Phaser.Scene {
     this.eventSprites.set(ev.id, container);
   }
 
+  /** Aktifkan pulse glow pada event terdekat. */
+  private updateNearestEventHighlight(): void {
+    const ev = this.findNearbyEvent();
+    for (const [, container] of this.eventSprites) {
+      const ring = container.getData("ring") as Phaser.GameObjects.Arc | undefined;
+      if (ring) ring.setVisible(false);
+    }
+    if (!ev) return;
+    const container = this.eventSprites.get(ev.id);
+    if (!container) return;
+    const ring = container.getData("ring") as Phaser.GameObjects.Arc | undefined;
+    if (!ring) return;
+    ring.setVisible(true);
+    this.tweens.killTweensOf(ring);
+    this.tweens.add({
+      targets: ring,
+      scale: { from: 0.9, to: 1.2 },
+      alpha: { from: 0.6, to: 0 },
+      duration: 700,
+      repeat: -1,
+    });
+  }
+
   override update(_time: number, delta: number) {
     if (this.dialog.isActive() || this.materialPanel) {
       this.handleDialogInput();
@@ -140,6 +173,7 @@ export abstract class WorldScene extends Phaser.Scene {
     }
     this.handlePlayerMovement(delta);
     this.handleInteractInput();
+    this.updateNearestEventHighlight();
     this.checkExits();
   }
 
@@ -234,10 +268,12 @@ export abstract class WorldScene extends Phaser.Scene {
   }
 
   private triggerEvent(ev: MapEvent) {
+    audio.playSfx("interact");
     const data = ev.data as DialogData | MaterialData | undefined;
     if (ev.kind === "dialog" && data && "lines" in data) {
       this.dialog.show(data, () => this.afterDialog(ev, data));
     } else if (ev.kind === "material" && data && "body" in data) {
+      audio.playSfx("success");
       this.showMaterialPanel(ev.id, data);
     } else if (ev.kind === "quiz") {
       this.scene.start("Quiz", { from: this.scene.key });
@@ -313,4 +349,60 @@ export abstract class WorldScene extends Phaser.Scene {
   }
 
   protected abstract buildMap(): TileMapData;
+
+  private pauseContainer: Phaser.GameObjects.Container | null = null;
+  private paused = false;
+
+  private togglePauseMenu(): void {
+    if (this.paused) {
+      this.closePauseMenu();
+    } else {
+      this.openPauseMenu();
+    }
+  }
+
+  private openPauseMenu(): void {
+    if (this.pauseContainer) return;
+    this.paused = true;
+    const cam = this.cameras.main;
+    const w = cam.width;
+    const h = cam.height;
+    const c = this.add.container(0, 0).setScrollFactor(0).setDepth(2000);
+    const bg = this.add.rectangle(w / 2, h / 2, w, h, 0x0f172a, 0.85);
+    c.add(bg);
+    const title = this.add.text(w / 2, h / 2 - 100, "Jeda", {
+      fontFamily: "monospace",
+      fontSize: "32px",
+      color: "#fde68a",
+    }).setOrigin(0.5);
+    c.add(title);
+    const resume = this.add.text(w / 2, h / 2 - 20, "[ Lanjutkan ]", {
+      fontFamily: "monospace",
+      fontSize: "18px",
+      color: "#0f172a",
+      backgroundColor: "#fde68a",
+      padding: { x: 20, y: 8 },
+    }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+    c.add(resume);
+    const titleBtn = this.add.text(w / 2, h / 2 + 30, "[ Kembali ke Judul ]", {
+      fontFamily: "monospace",
+      fontSize: "16px",
+      color: "#cbd5e1",
+      backgroundColor: "#1e293b",
+      padding: { x: 16, y: 6 },
+    }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+    c.add(titleBtn);
+    resume.on("pointerdown", () => this.closePauseMenu());
+    titleBtn.on("pointerdown", () => { this.scene.start("Title"); });
+    this.pauseContainer = c;
+  }
+
+  private closePauseMenu(): void {
+    if (this.pauseContainer) {
+      this.pauseContainer.destroy();
+      this.pauseContainer = null;
+    }
+    this.paused = false;
+  }
 }
+
