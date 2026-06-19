@@ -99,6 +99,8 @@ export abstract class WorldScene extends Phaser.Scene {
     }
 
     this.onAfterCreate();
+    this.showTouchControls();
+    this.fadeIn();
   }
 
   protected loadPlayerTextures(): { front: string; back: string } {
@@ -181,16 +183,17 @@ export abstract class WorldScene extends Phaser.Scene {
     if (this.interactCooldown > 0) this.interactCooldown -= delta;
     let dx = 0;
     let dy = 0;
-    if (this.cursors.left?.isDown || this.wasd.left.isDown) dx -= 1;
-    if (this.cursors.right?.isDown || this.wasd.right.isDown) dx += 1;
-    if (this.cursors.up?.isDown || this.wasd.up.isDown) dy -= 1;
-    if (this.cursors.down?.isDown || this.wasd.down.isDown) dy += 1;
+    const tUp = this.isTouchDown("up"), tDown = this.isTouchDown("down"), tLeft = this.isTouchDown("left"), tRight = this.isTouchDown("right");
+    if (this.cursors.left?.isDown || this.wasd.left.isDown || tLeft) dx -= 1;
+    if (this.cursors.right?.isDown || this.wasd.right.isDown || tRight) dx += 1;
+    if (this.cursors.up?.isDown || this.wasd.up.isDown || tUp) dy -= 1;
+    if (this.cursors.down?.isDown || this.wasd.down.isDown || tDown) dy += 1;
 
     const speed = 110; // px/s
     const dt = delta / 1000;
     const moveLen = Math.hypot(dx, dy);
     if (moveLen === 0) {
-      this.player.anims.stop();
+      this.tweens.killTweensOf(this.player);
       return;
     }
     dx /= moveLen;
@@ -200,6 +203,16 @@ export abstract class WorldScene extends Phaser.Scene {
     // gerak + collision
     this.tryMove(vx * dt, 0);
     this.tryMove(0, vy * dt);
+    // animasi bob vertikal saat bergerak
+    if (!this.tweens.isTweening(this.player)) {
+      this.tweens.add({
+        targets: this.player,
+        y: this.player.y - 2,
+        duration: 110,
+        yoyo: true,
+        repeat: -1,
+      });
+    }
 
     // frame & flip
     const wantBack = dy < 0 && dx === 0;
@@ -276,7 +289,7 @@ export abstract class WorldScene extends Phaser.Scene {
       audio.playSfx("success");
       this.showMaterialPanel(ev.id, data);
     } else if (ev.kind === "quiz") {
-      this.scene.start("Quiz", { from: this.scene.key });
+      WorldScene.fadeOutThenStart(this, "Quiz", { from: this.scene.key });
     } else if (ev.kind === "info" && data && "text" in data) {
       this.dialog.show({ lines: [data.text as string] });
     }
@@ -297,7 +310,7 @@ export abstract class WorldScene extends Phaser.Scene {
     const py = this.player.y - TILE_SIZE / 2;
     for (const ex of this.mapData.exits) {
       if (Math.hypot(px - (ex.x * ts + ts / 2), py - (ex.y * ts + ts / 2)) < ts * 0.5) {
-        this.scene.start(ex.toScene, { spawn: ex.toSpawn });
+        WorldScene.fadeOutThenStart(this, ex.toScene, { spawn: ex.toSpawn });
       }
     }
   }
@@ -395,6 +408,67 @@ export abstract class WorldScene extends Phaser.Scene {
     resume.on("pointerdown", () => this.closePauseMenu());
     titleBtn.on("pointerdown", () => { this.scene.start("Title"); });
     this.pauseContainer = c;
+  }
+
+
+  /* -------------------- TOUCH D-PAD -------------------- */
+  private touchPadContainer: Phaser.GameObjects.Container | null = null;
+  private touchState: { up: boolean; down: boolean; left: boolean; right: boolean } = { up: false, down: false, left: false, right: false };
+
+  /** Tampilkan D-pad di layar untuk device tanpa keyboard. */
+  private showTouchControls(): void {
+    if (this.touchPadContainer) return;
+    if (!this.sys.game.device.input.touch) {
+      // device tidak touch (desktop); lewati
+      return;
+    }
+    const cam = this.cameras.main;
+    const size = 64;
+    const gap = 12;
+    const baseX = 80;
+    const baseY = cam.height - 80;
+    const c = this.add.container(0, 0).setScrollFactor(0).setDepth(1800);
+
+    const makeBtn = (x: number, y: number, label: string, dir: "up" | "down" | "left" | "right") => {
+      const bg = this.add.circle(x, y, size / 2, 0x0f172a, 0.7).setStrokeStyle(2, 0x94a3b8, 0.8);
+      const t = this.add.text(x, y, label, { fontFamily: "monospace", fontSize: "22px", color: "#e2e8f0" }).setOrigin(0.5);
+      c.add([bg, t]);
+      bg.setInteractive({ useHandCursor: true });
+      bg.on("pointerdown", () => { this.touchState[dir] = true; bg.setFillStyle(0xfbbf24, 0.9); });
+      bg.on("pointerup", () => { this.touchState[dir] = false; bg.setFillStyle(0x0f172a, 0.7); });
+      bg.on("pointerout", () => { this.touchState[dir] = false; bg.setFillStyle(0x0f172a, 0.7); });
+    };
+
+    makeBtn(baseX, baseY - size - gap, "▲", "up");
+    makeBtn(baseX - size - gap, baseY, "◀", "left");
+    makeBtn(baseX + size + gap, baseY, "▶", "right");
+    makeBtn(baseX, baseY + size + gap, "▼", "down");
+
+    const actBg = this.add.circle(cam.width - 80, cam.height - 80, size / 2, 0x16a34a, 0.85).setStrokeStyle(2, 0x86efac, 0.9);
+    const actT = this.add.text(cam.width - 80, cam.height - 80, "Aksi", { fontFamily: "monospace", fontSize: "16px", color: "#f0fdf4" }).setOrigin(0.5);
+    c.add([actBg, actT]);
+    actBg.setInteractive({ useHandCursor: true });
+    actBg.on("pointerdown", () => this.handleInteractInput());
+
+    this.touchPadContainer = c;
+  }
+
+  private isTouchDown(dir: "up" | "down" | "left" | "right"): boolean {
+    return this.touchState[dir];
+  }
+
+
+  /* -------------------- TRANSISI -------------------- */
+  private fadeIn(): void {
+    const cam = this.cameras.main;
+    cam.fadeIn(400, 15, 23, 42);
+  }
+  static fadeOutThenStart(scene: Phaser.Scene, key: string, data?: object): void {
+    const cam = scene.cameras.main;
+    cam.fadeOut(300, 15, 23, 42);
+    cam.once("camerafadeoutcomplete", () => {
+      scene.scene.start(key, data);
+    });
   }
 
   private closePauseMenu(): void {

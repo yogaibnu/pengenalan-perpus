@@ -68,6 +68,25 @@ export class TitleScene extends Phaser.Scene {
     continueBtn.on("pointerdown", () => this.continueGame());
     creditBtn.on("pointerdown", () => this.scene.start("Ending"));
 
+    // Tombol mute
+    const muteBtn = this.add.text(w - 60, 36, "🔊", {
+      fontFamily: "monospace",
+      fontSize: "20px",
+      backgroundColor: "#1e293b",
+      padding: { x: 8, y: 6 },
+    }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+    const refreshMute = () => {
+      const muted = (audio as unknown as { muted: boolean }).muted;
+      muteBtn.setText(muted ? "🔇" : "🔊");
+      muteBtn.setBackgroundColor(muted ? "#7f1d1d" : "#1e293b");
+    };
+    muteBtn.on("pointerdown", () => {
+      const cur = (audio as unknown as { muted: boolean }).muted;
+      audio.setMuted(!cur);
+      refreshMute();
+    });
+    refreshMute();
+
     this.input.keyboard!.on("keydown-ENTER", () => this.scene.start("CharacterSelect"));
   }
 
