@@ -94,7 +94,9 @@ Boot → Title → CharacterSelect → Classroom → Library
 - [x] Implementasi masing-masing scene konkret (Boot, Title, CharacterSelect, Classroom, Library, DigitalLibrary, Quiz, Ending).
 - [x] Unit test untuk save (`save.test.ts`).
 - [x] Build & smoke test lokal (Playwright headless): Title, CharacterSelect, ClassroomScene — 0 error console.
-- [ ] Repo GitHub `yogaibnu/pengenalan-perpus`, commit & push (segera).
+- [x] Repo GitHub `yogaibnu/pengenalan-perpus` dibuat & dipush: https://github.com/yogaibnu/pengenalan-perpus
+  - 2 commit: `feat: initial scaffold` + `chore: gitignore tsbuildinfo`.
+  - Visibilitas: public. Branch: main.
 
 ## Catatan Smoke Test
 - File smoke: `scripts-smoke.mjs` (Playwright, spawn `vite preview` lalu navigasi + screenshot).
