@@ -71,6 +71,7 @@ export class ClassroomScene extends WorldScene {
       events: [
         { id: "ev-guru", x: 15, y: 5, kind: "dialog", label: "Bapak Guru", trigger: "interact", data: DIALOGS["class-guru"] },
         { id: "ev-teman", x: 4, y: 9, kind: "dialog", label: "Teman", trigger: "interact", data: DIALOGS["class-teman"] },
+        { id: "ev-pintar", x: 7, y: 9, kind: "dialog", label: "Siswa Teladan", trigger: "interact", data: DIALOGS["class-pintar"] },
         { id: "ev-papan", x: 9, y: 3, kind: "info", label: "Papan Tulis", trigger: "interact", data: { text: "Papan tulis berisi jadwal pelajaran hari ini." } },
       ],
       exits: [

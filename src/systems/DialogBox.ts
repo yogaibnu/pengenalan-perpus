@@ -194,6 +194,19 @@ export class DialogBox extends Phaser.GameObjects.Container {
     return (this.pendingData?.choices ?? []).indexOf(choice);
   }
 
+
+  /** Paksa tutup dialog (skip cepat). Panggil onComplete tanpa choice index. */
+  skipAll(): void {
+    if (!this.visible) return;
+    this.clearChoiceUI();
+    this.setVisible(false);
+    this.typingTimer?.remove();
+    this.typingTimer = null;
+    this.pendingData = null;
+    const cb = this.onComplete;
+    this.onComplete = undefined;
+    cb?.(undefined);
+  }
   isActive(): boolean {
     return this.visible;
   }

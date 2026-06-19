@@ -1,7 +1,11 @@
 import { defineConfig } from "vite";
 
+// Saat build, jika GITHUB_PAGES=true → base=/pengenalan-perpus/
+// (project page). Untuk development/preview lokal, base tetap relatif "./".
+const isGhPages = process.env.GITHUB_PAGES === "true";
+
 export default defineConfig({
-  base: "./",
+  base: isGhPages ? "/pengenalan-perpus/" : "./",
   server: {
     host: true,
     port: 5173,

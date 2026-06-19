@@ -54,6 +54,8 @@ export class DigitalLibraryScene extends WorldScene {
       events: [
         { id: "dig-panduan", x: Math.floor(cols / 2), y: 6, kind: "dialog", label: "Panduan", trigger: "interact", data: DIALOGS["dig-panduan"] },
         { id: "dig-siswa", x: 9, y: 11, kind: "dialog", label: "Siswa", trigger: "interact", data: DIALOGS["dig-siswa"] },
+        { id: "dig-admin", x: 9, y: 2, kind: "dialog", label: "Admin", trigger: "interact", data: DIALOGS["dig-admin"] },
+        { id: "dig-peneliti", x: 3, y: 11, kind: "dialog", label: "Peneliti", trigger: "interact", data: DIALOGS["dig-peneliti"] },
         { id: "dig-ebook", x: 5, y: 4, kind: "material", label: "E-Book", trigger: "interact", data: MATERIALS["dig-ebook"] },
         { id: "dig-opac", x: 13, y: 4, kind: "material", label: "OPAC", trigger: "interact", data: MATERIALS["dig-opac"] },
         { id: "dig-database", x: 5, y: 8, kind: "material", label: "Database", trigger: "interact", data: MATERIALS["dig-database"] },

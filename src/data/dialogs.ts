@@ -19,6 +19,13 @@ export const DIALOGS: Record<string, DialogData> = {
       "Wah, tugasnya menarik. Ayo kita ke perpustakaan bareng-bareng!",
     ],
   },
+  "class-pintar": {
+    speaker: "Siswa Teladan",
+    lines: [
+      "Hei, aku biasanya cari buku lewat katalog dulu biar tidak buang waktu. Kamu bisa minta pustakawan mencarikan.",
+      "Kalau perlu, pinjam kamus besar di rak referensi ya. Biasanya paling lengkap.",
+    ],
+  },
 
   // ---- Perpustakaan Sekolah ----
   "lib-kepala": {
@@ -35,10 +42,24 @@ export const DIALOGS: Record<string, DialogData> = {
       "Buku referensi seperti kamus, ensiklopedia, dan atlas diletakkan di rak khusus. Yuk, kita lihat bersama!",
     ],
   },
+  "lib-pustakawan2": {
+    speaker: "Pustakawan (Meja Sirkulasi)",
+    lines: [
+      "Mau pinjam buku? Bawakan kartu anggota dan isilah form peminjaman.",
+      "Maksimal 2 buku selama 1 minggu. Jangan lupa dikembalikan tepat waktu, ya!",
+    ],
+  },
   "lib-siswa": {
     speaker: "Siswa",
     lines: [
       "Tempatnya tenang dan nyaman, cocok buat belajar. Yuk, duduk di meja baca!",
+    ],
+  },
+  "lib-pembaca": {
+    speaker: "Pembaca Aktif",
+    lines: [
+      "Aku hampir setiap hari ke sini. Favoritku buku fiksi petualangan, tapi ensiklopedia juga asyik lho.",
+      "Kalau kamu suka biografi, ada koleksi bagus di rak sebelah kiri.",
     ],
   },
 
@@ -55,6 +76,20 @@ export const DIALOGS: Record<string, DialogData> = {
     speaker: "Siswa",
     lines: [
       "Wah, ternyata banyak cara mencari bahan bacaan sekarang. Tidak harus ke perpustakaan fisik, ya!",
+    ],
+  },
+  "dig-admin": {
+    speaker: "Admin Sistem",
+    lines: [
+      "Sistem katalog daring kami pakai aplikasi SLiMS. Coba ketik kata kunci di kolom pencarian OPAC.",
+      "Kalau koneksi lambat, gunakan repositori cache lokal yang sudah kami sediakan.",
+    ],
+  },
+  "dig-peneliti": {
+    speaker: "Peneliti",
+    lines: [
+      "Untuk karya ilmiah, repositori institusi adalah sumber paling tepercaya. Banyak yang bisa diunduh gratis.",
+      "Hindari sumber yang tidak jelas penulisnya. Cek dulu kredibilitasnya.",
     ],
   },
 };

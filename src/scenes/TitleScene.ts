@@ -88,6 +88,9 @@ export class TitleScene extends Phaser.Scene {
     refreshMute();
 
     this.input.keyboard!.on("keydown-ENTER", () => this.scene.start("CharacterSelect"));
+    // shortcut untuk testing/demo
+    this.input.keyboard!.on("keydown-G", () => this.scene.start("MatchGame"));
+    this.input.keyboard!.on("keydown-K", () => this.scene.start("Quiz", { from: "Title" }));
   }
 
   private continueGame() {

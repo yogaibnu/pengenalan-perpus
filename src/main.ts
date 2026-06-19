@@ -5,6 +5,7 @@ import { ClassroomScene } from "./scenes/ClassroomScene";
 import { LibraryScene } from "./scenes/LibraryScene";
 import { DigitalLibraryScene } from "./scenes/DigitalLibraryScene";
 import { QuizScene } from "./scenes/QuizScene";
+import { MatchGameScene } from "./scenes/MatchGameScene";
 import { EndingScene } from "./scenes/EndingScene";
 import { BootScene } from "./scenes/BootScene";
 
@@ -27,8 +28,15 @@ const config: Phaser.Types.Core.GameConfig = {
     LibraryScene,
     DigitalLibraryScene,
     QuizScene,
+    MatchGameScene,
     EndingScene,
   ],
 };
 
-new Phaser.Game(config);
+const game = new Phaser.Game(config);
+
+// expose ke window untuk debugging/automated testing
+if (typeof window !== "undefined") {
+  (globalThis as unknown as { __game: Phaser.Game }).__game = game as unknown as Phaser.Game;
+  (window as unknown as { __game?: Phaser.Game }).__game = (globalThis as unknown as { __game: Phaser.Game }).__game;
+}

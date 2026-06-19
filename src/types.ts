@@ -34,6 +34,7 @@ export type InteractionKind =
   | "material"        // buku referensi -> buka panel materi
   | "transfer"        // pindah scene (handled by exits)
   | "quiz"            // picu kuis
+  | "minigame"        // picu mini-game
   | "info";           // info singkat (sign/label)
 
 export interface MapEvent {

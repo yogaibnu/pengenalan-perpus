@@ -120,6 +120,8 @@ export abstract class WorldScene extends Phaser.Scene {
       glyph = this.add.circle(0, 0, ts / 3, 0xfde68a, 0.8);
     } else if (ev.kind === "quiz") {
       glyph = this.add.circle(0, 0, ts / 3, 0x22d3ee, 0.8);
+    } else if (ev.kind === "minigame") {
+      glyph = this.add.circle(0, 0, ts / 3, 0xa855f7, 0.8);
     } else if (ev.kind === "info") {
       glyph = this.add.rectangle(0, 0, ts / 2, ts / 2, 0x94a3b8, 0.8);
     } else {
@@ -248,6 +250,13 @@ export abstract class WorldScene extends Phaser.Scene {
   }
 
   private handleDialogInput() {
+    // Shift+Enter → skip semua dialog
+    const shift = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
+    if ((Phaser.Input.Keyboard.JustDown(this.cursors.space!) || Phaser.Input.Keyboard.JustDown(this.wasd.interact))
+        && shift.isDown) {
+      this.dialog.skipAll();
+      return;
+    }
     if (Phaser.Input.Keyboard.JustDown(this.cursors.space!) || Phaser.Input.Keyboard.JustDown(this.wasd.interact)) {
       this.dialog.advance();
     } else if (Phaser.Input.Keyboard.JustDown(this.cursors.up!) || Phaser.Input.Keyboard.JustDown(this.wasd.up)) {
@@ -290,6 +299,8 @@ export abstract class WorldScene extends Phaser.Scene {
       this.showMaterialPanel(ev.id, data);
     } else if (ev.kind === "quiz") {
       WorldScene.fadeOutThenStart(this, "Quiz", { from: this.scene.key });
+    } else if (ev.kind === "minigame") {
+      WorldScene.fadeOutThenStart(this, "MatchGame", { from: this.scene.key });
     } else if (ev.kind === "info" && data && "text" in data) {
       this.dialog.show({ lines: [data.text as string] });
     }

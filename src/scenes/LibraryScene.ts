@@ -64,6 +64,7 @@ export class LibraryScene extends WorldScene {
         { id: "lib-geografi", x: cols - 3, y: 4, kind: "material", label: "Geografi", trigger: "interact", data: MATERIALS["lib-geografi"] },
         { id: "lib-pedoman", x: cols - 3, y: 6, kind: "material", label: "Pedoman", trigger: "interact", data: MATERIALS["lib-pedoman"] },
         { id: "lib-quiz", x: Math.floor(cols / 2), y: 14, kind: "quiz", label: "Kuis", trigger: "interact" },
+        { id: "lib-match", x: Math.floor(cols / 2), y: 11, kind: "minigame", label: "Mini-game", trigger: "interact" },
         { id: "lib-digital", x: Math.floor(cols / 2), y: 1, kind: "info", label: "Pintu Digital", trigger: "interact", data: { text: "Pintu menuju Perpustakaan Digital. Tekan Spasi saat berdiri di tile bercahaya kuning." } },
       ],
       exits: [

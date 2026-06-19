@@ -98,21 +98,29 @@ Boot → Title → CharacterSelect → Classroom → Library
   - Visibilitas: public. Branch: main.
 
 ## 7b. Roadmap Lanjutan
-- [x] Tambah frame 'up' untuk sprite agar hadap atas tidak terlihat seperti hadap depan.
-- [x] Tile tema school: warnai dinding lebih kontras dengan library.
-- [x] Highlight event terdekat (pulse ring kuning) saat pemain berdiri di dekat event.
-- [x] Pause menu (Esc → Lanjutkan / Kembali ke Judul).
-- [x] Progress bar (HUD pojok kanan-atas: jumlah materi dibaca / total).
-- [x] Audio BGM + SFX (WebAudio API sintesis, tanpa file eksternal).
-- [x] Tutorial popup interaktif di ClassroomScene (auto-dismiss saat pemain bergerak).
-- [x] Unit test tambahan untuk Audio (3 test).
-- [x] Smoke test untuk semua scene (0 error console).
-- [x] Touch D-pad untuk mobile/tablet (auto-detect device.input.touch).
-- [x] Transisi fade in/out antar scene (300-400ms).
-- [x] Animasi langkah pemain (bouncing vertikal saat berjalan).
-- [x] Tombol mute/unmute (🔊/🔇) di TitleScene.
+- [x] Sprite 2-arah (front/back)
+- [x] Tile school kontras
+- [x] Highlight event terdekat (pulse ring)
+- [x] Pause menu (Esc)
+- [x] Progress bar HUD
+- [x] Audio BGM 3 channel + SFX (WebAudio sintesis)
+- [x] Tutorial popup interaktif
+- [x] Audio test (3 test, 6/6 total)
+- [x] Smoke test semua scene (0 error)
+- [x] Touch D-pad mobile
+- [x] Transisi fade
+- [x] Animasi langkah
+- [x] Tombol mute
+- [x] **Mini-game Mencocokkan Buku** (MatchGameScene): 5 deskripsi → 5 kategori
+  - Lencana baru: "Ahli Referensi" (5/5), "Penjelajah Buku" (≥3/5)
+  - Trigger dari tile ungu di LibraryScene
+- [x] **Dialog skip** (Shift+Enter)
+- [x] **NPC tambahan** (4 NPC baru dengan dialog orisinal): Siswa Teladan, Pustakawan Sirkulasi, Pembaca Aktif, Admin Sistem, Peneliti
+- [x] **GitHub Pages workflow** auto-deploy saat push ke main
+- [x] **Vite base** dinamis: GITHUB_PAGES=true → /pengenalan-perpus/, default → ./
+- [x] **window.__game** hook untuk automated testing
 - [ ] Unit test untuk DialogBox flow (kompleks; perlu Phaser mock).
-- [ ] Polish: lebih banyak aset NPC, dekorasi map, audio tambahan.
+- [ ] Polish: animasi langkah lebih halus, transisi scene dengan directional hint.
 
 ## 7c. Commit Riwayat (ringkas)
 - `b6dcf39` feat: initial scaffold
@@ -121,6 +129,8 @@ Boot → Title → CharacterSelect → Classroom → Library
 - `3accc22` feat: sprite 2-arah + tile school kontras
 - `7dcd0df` feat: audio, pause menu, progress HUD, tutorial, highlight
 - `94ef9ef` feat: touch D-pad, transisi fade, animasi langkah, mute toggle
+- `07485da` docs: finalisasi README & HANDOVER
+- (current) feat: mini-game MatchGame, dialog skip, NPC tambahan, GitHub Pages workflow
 
 ## Catatan Smoke Test
 - File smoke: `scripts-smoke.mjs` (Playwright, spawn `vite preview` lalu navigasi + screenshot).
