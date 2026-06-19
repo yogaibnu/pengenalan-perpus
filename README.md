@@ -62,5 +62,10 @@ Lihat `HANDOVER.md` untuk dokumentasi teknis lengkap dan catatan handover antar 
 - **Kode**: MIT (lihat `LICENSE`).
 - **Konten edukasi**: Bebas digunakan untuk pengajaran.
 
+## 🔗 Live Demo
+Game deployed via GitHub Pages: **https://yogaibnu.github.io/pengenalan-perpus/**
+
+Setiap push ke branch `main` akan otomatis trigger deploy.
+
 ## 🔗 Repo
 https://github.com/yogaibnu/pengenalan-perpus
