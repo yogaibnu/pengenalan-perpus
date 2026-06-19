@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import type { TileMapData, MapEvent, DialogData, MaterialData } from "../types";
-import { TILE_SIZE, generateTileset } from "./SpriteFactory";
+import { TILE_SIZE, generateTileset, generateCharacterSprite } from "./SpriteFactory";
 import { DialogBox } from "./DialogBox";
 import { loadState, saveState } from "./save";
 
@@ -11,6 +11,8 @@ import { loadState, saveState } from "./save";
 export abstract class WorldScene extends Phaser.Scene {
   protected mapData!: TileMapData;
   protected player!: Phaser.GameObjects.Sprite;
+  protected playerFrontKey!: string;
+  protected playerBackKey!: string;
   protected cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   protected wasd!: { up: Phaser.Input.Keyboard.Key; down: Phaser.Input.Keyboard.Key; left: Phaser.Input.Keyboard.Key; right: Phaser.Input.Keyboard.Key; interact: Phaser.Input.Keyboard.Key };
   protected dialog!: DialogBox;
@@ -51,9 +53,21 @@ export abstract class WorldScene extends Phaser.Scene {
       g.setStrokeStyle(2, 0xfde68a, 0.9);
     }
 
+    // pastikan tekstur pemain tersedia
+    const playerKeys = this.loadPlayerTextures();
+    if (!this.textures.exists(playerKeys.front) || !this.textures.exists(playerKeys.back)) {
+      generateCharacterSprite(this, loadState().gender ?? "male", {
+        skin: "#f1c27d",
+        hair: loadState().gender === "female" ? "#7c2d12" : "#1f2937",
+        shirt: loadState().gender === "female" ? "#be185d" : "#1d4ed8",
+        pants: loadState().gender === "female" ? "#831843" : "#1e3a8a",
+      });
+    }
+    this.playerFrontKey = playerKeys.front;
+    this.playerBackKey = playerKeys.back;
     // spawn player
     const sp = this.mapData.spawn;
-    this.player = this.add.sprite(sp.x * ts + ts / 2, sp.y * ts + ts / 2, this.getPlayerTextureKey(), 0);
+    this.player = this.add.sprite(sp.x * ts + ts / 2, sp.y * ts + ts / 2, this.playerFrontKey);
     this.player.setOrigin(0.5, 1);
 
     // kamera
@@ -83,9 +97,13 @@ export abstract class WorldScene extends Phaser.Scene {
     this.onAfterCreate();
   }
 
-  protected getPlayerTextureKey(): string {
+  protected loadPlayerTextures(): { front: string; back: string } {
     const state = loadState();
-    return state.gender === "female" ? "char-female" : "char-male";
+    const gender = state.gender ?? "male";
+    return {
+      front: `char-${gender}-front`,
+      back: `char-${gender}-back`,
+    };
   }
 
   protected spawnEventVisual(ev: MapEvent) {
@@ -150,10 +168,13 @@ export abstract class WorldScene extends Phaser.Scene {
     this.tryMove(0, vy * dt);
 
     // frame & flip
+    const wantBack = dy < 0 && dx === 0;
+    const targetKey = wantBack ? this.playerBackKey : this.playerFrontKey;
+    if (this.player.texture.key !== targetKey) {
+      this.player.setTexture(targetKey);
+    }
     if (dx < 0) this.player.setFlipX(false);
     else if (dx > 0) this.player.setFlipX(true);
-    if (dy < 0) this.player.setFrame(0);
-    else this.player.setFrame(0);
   }
 
   private tryMove(dx: number, dy: number) {

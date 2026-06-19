@@ -87,7 +87,7 @@ Boot → Title → CharacterSelect → Classroom → Library
 - [x] Konfigurasi project (Vite + TS + Vitest).
 - [x] Sistem save (`save.ts`).
 - [x] `DialogBox` UI.
-- [x] `SpriteFactory` prosedural (sprite 4 arah, 3 tema tileset).
+- [x] `SpriteFactory` prosedural (1 frame sprite + 4 tile tema: school, library, digital).
 - [x] `WorldScene` base dengan collision, event, exit, material panel.
 - [x] `main.ts` mendaftarkan semua scene.
 - [x] Konten data orisinal (`data/dialogs.ts`, `data/materials.ts`, `data/quiz.ts`).
@@ -95,8 +95,17 @@ Boot → Title → CharacterSelect → Classroom → Library
 - [x] Unit test untuk save (`save.test.ts`).
 - [x] Build & smoke test lokal (Playwright headless): Title, CharacterSelect, ClassroomScene — 0 error console.
 - [x] Repo GitHub `yogaibnu/pengenalan-perpus` dibuat & dipush: https://github.com/yogaibnu/pengenalan-perpus
-  - 2 commit: `feat: initial scaffold` + `chore: gitignore tsbuildinfo`.
   - Visibilitas: public. Branch: main.
+
+## 7b. Roadmap Lanjutan
+- [ ] Tambah frame 'up' untuk sprite agar hadap atas tidak terlihat seperti hadap depan.
+- [ ] Tile tema school: warnai dinding lebih kontras dengan library (saat ini mirip).
+- [ ] Smoke test untuk DigitalLibrary, Quiz, Ending.
+- [ ] Audio (BGM/SFX) via WebAudio API (sintesis sederhana, tanpa file eksternal).
+- [ ] Highlight event terdekat + tooltip (UX discoverability).
+- [ ] Pause menu (Esc → keluar ke title / reset).
+- [ ] Progress bar (jumlah materi dibaca / total).
+- [ ] Unit test tambahan (DialogBox flow, world interaction).
 
 ## Catatan Smoke Test
 - File smoke: `scripts-smoke.mjs` (Playwright, spawn `vite preview` lalu navigasi + screenshot).

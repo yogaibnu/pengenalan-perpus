@@ -22,16 +22,14 @@ export class CharacterSelectScene extends Phaser.Scene {
     }).setOrigin(0.5);
 
     // hasilkan tekstur di scene ini juga (jika user me-reload)
-    if (!this.textures.exists("char-male")) {
+    if (!this.textures.exists("char-male-front") || !this.textures.exists("char-female-front")) {
       generateCharacterSprite(this, "male", { skin: "#f1c27d", hair: "#1f2937", shirt: "#1d4ed8", pants: "#1e3a8a" });
-    }
-    if (!this.textures.exists("char-female")) {
       generateCharacterSprite(this, "female", { skin: "#f1c27d", hair: "#7c2d12", shirt: "#be185d", pants: "#831843" });
     }
 
     // 2 sprite preview
-    const male = this.add.image(w / 2 - 120, h / 2, "char-male", 0).setScale(3);
-    const female = this.add.image(w / 2 + 120, h / 2, "char-female", 0).setScale(3);
+    const male = this.add.image(w / 2 - 120, h / 2, "char-male-front").setScale(3);
+    const female = this.add.image(w / 2 + 120, h / 2, "char-female-front").setScale(3);
 
     const maleBg = this.add.rectangle(w / 2 - 120, h / 2, 100, 140, 0x1e293b, 0.7);
     const femaleBg = this.add.rectangle(w / 2 + 120, h / 2, 100, 140, 0x1e293b, 0.7);
