@@ -84,7 +84,7 @@ Boot → Title → CharacterSelect → Classroom → Library
 ```
 
 ## 7. Status Saat Ini (Update Terakhir — v0.2.1)
-**HOTFIX: bug movement vertikal & dialog stuck.**
+**HOTFIX VERIFIED di live:** movement vertikal & dialog advance bekerja normal.
 
 - [x] Cache key objects di `create()` sekali (tidak boleh `addKey()` di `update()`/`handleDialogInput()`/`handleInteractInput()`).
 - [x] Hapus animasi langkah via tween yang override `player.y` (mengganggu collision detection).
